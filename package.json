@@ -12,6 +12,8 @@
         "samples": "pnpm -r run build && node scripts/render-samples.mjs",
         "fixtures": "pnpm -r run build && node scripts/render-tests.mjs",
         "test": "pnpm -r run test",
+        "test:services": "pnpm --filter @nowline/services test",
+        "check:services": "pnpm --filter @nowline/services check",
         "lint": "biome lint .",
         "lint:fix": "biome lint --write .",
         "format": "biome format --write .",
