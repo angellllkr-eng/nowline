@@ -1,0 +1,42 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/estate.schema.json",
+  "version": "1.0.0",
+  "operator": "resellerpro",
+  "ownerControl": "A11-K",
+  "estates": [
+    {
+      "id": "angelk-com",
+      "domain": "angelk.com",
+      "wwwDomain": "www.angelk.com",
+      "role": "primary-estate",
+      "status": "configured",
+      "routing": {
+        "canonicalHost": "angelk.com",
+        "redirectWwwToCanonical": true
+      },
+      "execution": {
+        "deployment": "owner-approved",
+        "dnsChanges": "owner-approved",
+        "credentialChanges": "owner-approved",
+        "publicPublication": "owner-approved"
+      }
+    },
+    {
+      "id": "nowline-com",
+      "domain": "nowline.com",
+      "wwwDomain": "www.nowline.com",
+      "role": "primary-estate",
+      "status": "configured",
+      "routing": {
+        "canonicalHost": "nowline.com",
+        "redirectWwwToCanonical": true
+      },
+      "execution": {
+        "deployment": "owner-approved",
+        "dnsChanges": "owner-approved",
+        "credentialChanges": "owner-approved",
+        "publicPublication": "owner-approved"
+      }
+    }
+  ]
+}
