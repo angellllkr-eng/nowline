@@ -1,0 +1,37 @@
+# Canonical Nowline Digital Hall service inventory.
+# CI/CD substitutes PROJECT_ID and REGION and deploys each service independently.
+services:
+  - name: auth-gateway
+    entrypoint: services/auth-gateway/index.js
+    health: /healthz
+    secrets: [OIDC_CLIENT_SECRET]
+  - name: launcher
+    entrypoint: services/launcher/index.js
+    health: /healthz
+    secrets: [LAUNCHER_PRIVATE_KEY]
+  - name: orchestrator
+    entrypoint: services/orchestrator/index.js
+    health: /healthz
+    secrets: []
+  - name: mcp
+    entrypoint: services/mcp/webhook.js
+    health: /healthz
+    secrets: [ZAPIER_WEBHOOK_SECRET]
+  - name: payments
+    entrypoint: services/payments/webhook.js
+    health: /healthz
+    secrets: [STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET]
+
+runtime:
+  platform: cloud-run
+  node: ">=22"
+  region: REGION
+  project: PROJECT_ID
+  domain: https://dev.nowline.angelk.com
+
+security:
+  - secrets are server-side only
+  - launcher signs RS256 JWTs with LAUNCHER_PRIVATE_KEY
+  - MCP accepts HMAC-signed events only
+  - Stripe webhooks require Stripe signature verification
+  - deployment and credential changes require owner approval
