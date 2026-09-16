@@ -1,5 +1,4 @@
-# Security Policy
-
+# Security Polic
 ## Supported versions
 
 Nowline is on `0.x`. The latest `0.x.y` line receives security fixes; older `0.x` lines do not. Once `1.0` ships, the policy will be revised to support the latest stable major and one previous major in line with SemVer expectations.
