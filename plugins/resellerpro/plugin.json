@@ -1,0 +1,28 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "resellerpro",
+  "version": "0.2.0",
+  "description": "ResellerPro governed estate operations for domains, sites, deployments, margin visibility and audited owner actions.",
+  "author": { "name": "A.K. / Angel Krastev — A11-K" },
+  "repository": "https://github.com/angellllkr-eng/nowline",
+  "license": "MIT",
+  "keywords": ["domains", "reseller", "sites", "deployments", "operations", "control-plane", "audit"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "ResellerPro",
+        "shortDescription": "Governed domain, site and deployment operations.",
+        "longDescription": "Use ResellerPro as the canonical operational surface for estate state, deployment evidence, audited actions and owner-controlled execution. It separates current actionable state from historical deployment noise and never treats source presence as proof of a live result.",
+        "developerName": "A11-K / A.K.",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "defaultPrompt": [
+          "Show the current estate state and only actionable blockers.",
+          "Audit what is ready across the Nowline repositories and identify anything not moved.",
+          "Verify the deployment path and evidence before calling it live.",
+          "Check whether language routing is actually wired across every relevant surface."
+        ]
+      }
+    }
+  }
+}
