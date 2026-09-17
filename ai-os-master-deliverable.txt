@@ -1,0 +1,63 @@
+AI-OS MASTER DELIVERABLE
+Project: Nowline — Digital Hall
+Founder: A.K.
+Repo: github.com/angellllkr-eng/nowline
+Branch: dev
+GCP Projects: angelk-dev (dev), angelk-prod (prod)
+Region: europe-west1
+Dev host: dev.nowline.angelk.com
+
+Purpose
+This manifest defines the production workstream for Nowline — Digital Hall. Secrets must never be committed; use GCP Secret Manager and GitHub Actions secrets for deployment credentials.
+
+CONTENTS
+1. README.md
+2. infra/cloudrun-services.yaml
+3. infra/api-gateway-config.yaml
+4. infra/monitoring-alerts.yaml
+5. memory/vector-schema.json
+6. memory/seed-vectors.json
+7. robotics/proto/robot_control.proto
+8. services/auth-gateway/index.js
+9. services/launcher/index.js
+10. services/mcp/webhook.js
+11. services/payments/webhook.js
+12. services/orchestrator/index.js
+13. services/planner/Dockerfile
+14. services/scheduler/Dockerfile
+15. services/mcp/Dockerfile
+16. docs/deployment-checklist.md
+17. docs/founder-brief.md
+18. LEGAL/terms.md
+19. LEGAL/privacy.md
+20. LEGAL/responsible-gambling.md
+21. LEGAL/dpia-template.md
+22. LEGAL/ukgc-application-draft.md
+23. LEGAL/mga-application-draft.md
+24-36. locales/en-GB, de, fr, es, it, nl, pl, bg, ro, sv, da, fi, pt/common.json
+37. MARKETING/press-release.md
+38. MARKETING/email-launch.txt
+39. MARKETING/social-tiles.txt
+40. MARKETING/aso-short.txt
+41. QA/iphone-checklist.md
+42. QA/laptop-checklist.md
+43. HANDOFF/email.txt
+44. HANDOFF/slack.txt
+45. HANDOFF/sensory-guidelines.md
+46. HANDOFF/animations.css
+47. HANDOFF/demo-script.md
+48. .github/PULL_REQUEST_TEMPLATE.md
+49. .github/workflows/ci.yaml
+50. scripts/create_repo.sh
+51. scripts/load_vectors.py
+52. ai-os-master-deliverable.txt
+53. FINAL_STATUS.txt
+
+SECURITY NOTES
+- Do NOT commit secrets, private keys, tokens, service-account keys, or webhook secrets.
+- External infrastructure and provider integrations require runtime verification before being marked live.
+- The supplied seed-vectors example is intentionally non-production and must be replaced with valid 1536-dimensional vectors before use.
+
+STATUS
+READY: dev branch created from main and manifest recorded.
+UNVERIFIED: Cloud Run, API Gateway, DNS, GCP secrets, Stripe, Zapier/MCP, and production integrations are not claimed live by this commit.
