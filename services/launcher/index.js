@@ -22,8 +22,13 @@ function languageCookie(cookieHeader) {
 }
 
 app.get('/healthz', (_req, res) => res.json({ ok: true, service: 'launcher', blocked: blocked() }));
+
 app.get('/routing/language', (req, res) => {
-  const language = resolveLanguage({ explicit: req.query.lang, cookie: languageCookie(req.headers.cookie), acceptLanguage: req.headers['accept-language'] });
+  const language = resolveLanguage({
+    explicit: req.query.lang,
+    cookie: languageCookie(req.headers.cookie),
+    acceptLanguage: req.headers['accept-language'],
+  });
   res.set('Cache-Control', 'private, max-age=300');
   res.json({ language, source: req.query.lang ? 'explicit' : 'request' });
 });
@@ -40,8 +45,7 @@ app.post('/launcher/request', async (req, res) => {
       .setIssuer(issuer).setAudience(audience).setSubject(actor).setJti(jti)
       .setIssuedAt().setExpirationTime(`${ttl}s`).sign(key);
     audit(actor, 'launch.request', plan_id);
-    const hall = process.env.HALL_URL || 'https://dev.nowline.angelk.com/hall';
-    res.json({ launch_url: `${hall}?token=${encodeURIComponent(token)}`, token, expires_in: ttl });
+    res.json({ launch_url: `${process.env.HALL_URL || 'https://dev.nowline.angelk.com/hall'}?token=${encodeURIComponent(token)}`, token, expires_in: ttl });
   } catch (error) {
     console.error(JSON.stringify({ event: 'launcher_error', message: error.message }));
     res.status(500).json({ error: 'launch_failed' });
