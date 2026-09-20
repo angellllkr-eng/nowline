@@ -1,0 +1,8 @@
+{
+  "name": "@nowline/launcher",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "start": "node index.js", "check": "node --check index.js" },
+  "dependencies": { "express": "^5.1.0", "jose": "^6.1.0" }
+}
