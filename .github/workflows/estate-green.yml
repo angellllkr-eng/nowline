@@ -1,0 +1,49 @@
+name: Estate Green Gate
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Verify repository hygiene
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find . -maxdepth 3 -type f \( -name '.env' -o -name '.env.*' \) ! -name '.env.example' | grep -q .; then
+            echo "Environment file detected; review before release."
+            exit 1
+          fi
+      - name: Verify project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f package.json ]]; then
+            if [[ -f package-lock.json ]]; then npm ci; else npm install; fi
+            npm test --if-present
+            npm run build --if-present
+          elif [[ -f pyproject.toml || -f requirements.txt ]]; then
+            python -m compileall -q .
+          elif [[ -f go.mod ]]; then
+            go test ./...
+          elif [[ -f Cargo.toml ]]; then
+            cargo test
+          elif [[ -f Package.swift ]]; then
+            swift test
+          elif [[ -f Gemfile ]]; then
+            bundle check || bundle install
+            bundle exec rake test
+          elif [[ -f pom.xml ]]; then
+            ./mvnw test 2>/dev/null || mvn test
+          elif [[ -f build.gradle || -f build.gradle.kts ]]; then
+            ./gradlew test 2>/dev/null || gradle test
+          else
+            echo "No recognized build contract; hygiene gate is the applicable check."
+          fi
