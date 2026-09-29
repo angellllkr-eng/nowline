@@ -47,3 +47,4 @@ jobs:
           else
             echo "No recognized build contract; hygiene gate is the applicable check."
           fi
+# estate-green trigger revision: 2026-09-30
