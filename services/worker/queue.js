@@ -1,0 +1,19 @@
+const DEFAULT_MAX_QUEUE_DEPTH=1000;
+const DEFAULT_MAX_IN_FLIGHT=50;
+const DEFAULT_MAX_ATTEMPTS=3;
+const DEFAULT_LEASE_SECONDS=60;
+const DEFAULT_COMPLETED_TTL_MS=24*60*60*1000;
+export function createQueue(options={}) {
+  const maxQueueDepth=normalizePositiveInt(options.maxQueueDepth,DEFAULT_MAX_QUEUE_DEPTH), maxInFlight=normalizePositiveInt(options.maxInFlight,DEFAULT_MAX_IN_FLIGHT), maxAttempts=normalizePositiveInt(options.maxAttempts,DEFAULT_MAX_ATTEMPTS), leaseSeconds=normalizePositiveInt(options.leaseSeconds,DEFAULT_LEASE_SECONDS), completedTtlMs=normalizePositiveInt(options.completedTtlMs,DEFAULT_COMPLETED_TTL_MS);
+  const queued=[],inFlight=new Map(),completed=new Map(),deadLetter=[],metrics={enqueued:0,claimed:0,completed:0,failed:0,retried:0,dead_lettered:0,duplicates:0,rejected:0,expired_leases:0};
+  function retryOrDeadLetter(job,reason,now=Date.now()){const attempts=job.attempts+1;if(attempts>=maxAttempts||queued.length>=maxQueueDepth){deadLetter.push({...job,attempts,failedAt:new Date(now).toISOString(),failureReason:attempts>=maxAttempts?reason:'retry_queue_capacity_reached'});metrics.dead_lettered++;metrics.failed++;return{state:'dead_letter',attempts};}queued.push({...job,attempts,claimedAt:null,leaseExpiresAt:null,retryReason:reason});metrics.retried++;return{state:'queued',attempts};}
+  function reap(now=Date.now()){for(const[key,r]of completed)if(r.completedAt+completedTtlMs<=now)completed.delete(key);for(const[key,job]of inFlight)if(job.leaseExpiresAt<=now){inFlight.delete(key);metrics.expired_leases++;retryOrDeadLetter(job,'lease_expired',now);}}
+  return {
+    enqueue(job){reap();if(!job?.idempotencyKey){metrics.rejected++;return{accepted:false,reason:'idempotency_key_required'}}if(queued.length>=maxQueueDepth){metrics.rejected++;return{accepted:false,reason:'queue_capacity_reached'}}if(queued.some(i=>i.idempotencyKey===job.idempotencyKey)||inFlight.has(job.idempotencyKey)||completed.has(job.idempotencyKey)){metrics.duplicates++;return{accepted:false,reason:'duplicate_job'}}const normalized={...job,attempts:Number.isInteger(job.attempts)&&job.attempts>=0?job.attempts:0,claimedAt:null,leaseExpiresAt:null};queued.push(normalized);metrics.enqueued++;return{accepted:true,job:normalized,depth:queued.length};},
+    claim(now=Date.now()){reap(now);if(inFlight.size>=maxInFlight)return null;const job=queued.shift();if(!job)return null;const claimed={...job,claimedAt:new Date(now).toISOString(),leaseExpiresAt:now+leaseSeconds*1000};inFlight.set(job.idempotencyKey,claimed);metrics.claimed++;return claimed;},
+    complete(idempotencyKey,ok=true,now=Date.now()){reap(now);const job=inFlight.get(idempotencyKey);if(!job)return{ok:false,reason:'job_not_in_flight'};inFlight.delete(idempotencyKey);if(ok){metrics.completed++;completed.set(idempotencyKey,{completedAt:now});return{ok:true,state:'completed',job};}return{ok:true,...retryOrDeadLetter(job,'worker_failure',now),job};},
+    get(idempotencyKey,now=Date.now()){reap(now);if(completed.has(idempotencyKey))return{state:'completed'};const inflight=inFlight.get(idempotencyKey);if(inflight)return{state:'in_flight',job:inflight};const queuedJob=queued.find(job=>job.idempotencyKey===idempotencyKey);if(queuedJob)return{state:'queued',job:queuedJob};const dlq=deadLetter.find(job=>job.idempotencyKey===idempotencyKey);if(dlq)return{state:'dead_letter',job:dlq};return null;},
+    snapshot(now=Date.now()){reap(now);return{queued:queued.length,inFlight:inFlight.size,deadLetter:deadLetter.length,completed:completed.size,capacity:Math.max(0,maxQueueDepth-queued.length),metrics:{...metrics}};}
+  };
+}
+function normalizePositiveInt(value,fallback){const number=Number(value);return Number.isInteger(number)&&number>0?number:fallback;}
