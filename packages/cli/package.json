@@ -44,7 +44,7 @@
     "dependencies": {
         "@babel/code-frame": "^8.0.0",
         "@clack/prompts": "^1.5.1",
-        "@modelcontextprotocol/sdk": "^1.29.0",
+        "@modelcontextprotocol/sdk": "^1.32.0",
         "@nowline/config": "workspace:*",
         "@nowline/core": "workspace:*",
         "@nowline/export": "workspace:*",
@@ -61,7 +61,7 @@
         "chalk": "^5.6.2",
         "citty": "^0.2.2",
         "consola": "^3.4.2",
-        "js-yaml": "^4.2.0",
+        "js-yaml": "^4.3.2",
         "langium": "~4.3.0"
     },
     "devDependencies": {
@@ -70,6 +70,6 @@
         "@types/js-yaml": "^4.0.9",
         "@types/node": "^25.9.3",
         "typescript": "^6.0.3",
-        "vitest": "^4.1.9"
+        "vitest": "^5.0.5"
     }
 }

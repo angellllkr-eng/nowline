@@ -37,7 +37,7 @@
     },
     "dependencies": {
         "@modelcontextprotocol/ext-apps": "^1.7.4",
-        "@modelcontextprotocol/sdk": "^1.29.0",
+        "@modelcontextprotocol/sdk": "^1.32.0",
         "@nowline/browser": "workspace:*",
         "@nowline/core": "workspace:*",
         "@nowline/export": "workspace:*",
@@ -48,12 +48,12 @@
         "@nowline/share-link": "workspace:*",
         "@resvg/resvg-wasm": "^2.6.2",
         "langium": "~4.3.0",
-        "zod": "^4.4.3"
+        "zod": "^4.6.6"
     },
     "devDependencies": {
         "@modelcontextprotocol/inspector": "0.22.0",
         "@types/node": "^25.9.3",
         "esbuild": "^0.28.1",
-        "vitest": "^4.1.9"
+        "vitest": "^5.0.5"
     }
 }

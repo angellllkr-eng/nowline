@@ -39,6 +39,6 @@
         "@types/pdfkit": "^0.17.6",
         "langium": "~4.3.0",
         "typescript": "^6.0.3",
-        "vitest": "^4.1.9"
+        "vitest": "^5.0.5"
     }
 }
