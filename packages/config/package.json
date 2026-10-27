@@ -27,12 +27,12 @@
         "test:watch": "vitest"
     },
     "dependencies": {
-        "js-yaml": "^4.2.0"
+        "js-yaml": "^4.3.2"
     },
     "devDependencies": {
         "@types/js-yaml": "^4.0.9",
         "@types/node": "^25.9.3",
         "typescript": "^6.0.3",
-        "vitest": "^4.1.9"
+        "vitest": "^5.0.5"
     }
 }
