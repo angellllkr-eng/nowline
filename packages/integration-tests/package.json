@@ -23,12 +23,12 @@
         "@nowline/renderer": "workspace:*",
         "@resvg/resvg-wasm": "^2.6.2",
         "@types/node": "^25.9.3",
-        "@vitest/browser": "4.1.9",
+        "@vitest/browser": "4.1.10",
         "@vitest/browser-playwright": "4.1.9",
         "esbuild": "^0.28.1",
         "langium": "~4.3.0",
         "playwright": "^1.61.0",
         "typescript": "^6.0.3",
-        "vitest": "^4.1.9"
+        "vitest": "^5.0.5"
     }
 }
